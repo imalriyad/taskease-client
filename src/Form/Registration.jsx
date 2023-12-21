@@ -1,11 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Google from "../Form/GoogleLogin";
-
+import { useForm } from "react-hook-form";
 
 /* eslint-disable react/no-unescaped-entities */
 const Registration = () => {
   const [isShow, setShow] = useState(false);
+  const [occupation, setOccupation] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const handleSelect = (e) => {
+    setOccupation(e.target.value);
+  };
+
+  const onSubmit = (data)=>{
+  console.log(data);
+  } 
+
 
   return (
     <div>
@@ -14,7 +30,7 @@ const Registration = () => {
           <p className="text-center md:text-3xl text-xl font-medium  ">
             Sign up to your account and take control of your tasks🥳
           </p>
-          <htmlForm className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 ">
+          <form onSubmit={handleSubmit(onSubmit)} className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 ">
             <div>
               <label htmlFor="Name" className="sr-only">
                 Name
@@ -23,6 +39,7 @@ const Registration = () => {
               <div className="relative">
                 <input
                   type="text"
+                  {...register("name", { required: true })}
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter Name"
                 />
@@ -53,6 +70,7 @@ const Registration = () => {
               <div className="relative">
                 <input
                   type="email"
+                  {...register("email", { required: true })}
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                 />
@@ -83,6 +101,7 @@ const Registration = () => {
               <div className="relative">
                 <input
                   type="number"
+                  {...register("number", { required: true })}
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter Number"
                 />
@@ -113,6 +132,7 @@ const Registration = () => {
 
               <div className="relative">
                 <input
+                  {...register("password", { required: true })}
                   type={`${isShow ? "text" : "password"}`}
                   className="w-full border rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
@@ -148,18 +168,22 @@ const Registration = () => {
 
             <div className="md:flex gap-2 items-center">
               <div className=" md:pb-0 pb-4">
-                <label htmlFor="password" className="sr-only">
+                <label htmlFor="type" className="sr-only">
                   Type
                 </label>
 
                 <div className="relative">
-                  <select className="select select-bordered w-full  focus:outline-none">
+                  <select
+                    value={occupation}
+                    onChange={handleSelect}
+                    className="select select-bordered w-full  focus:outline-none"
+                  >
                     <option disabled selected>
                       What is your occupation?
                     </option>
                     <option>Student</option>
                     <option>Teacher</option>
-                    <option>Baker</option>
+                    <option>Banker</option>
                     <option>Developer</option>
                     <option>Markter</option>
                   </select>
@@ -192,8 +216,11 @@ const Registration = () => {
                 Sign in
               </Link>
             </p>
-          </htmlForm>
-         <div className="md:max-w-[220px] max-w-[140px]">  <Google></Google></div>
+          </form>
+          <div className="md:max-w-[220px] max-w-[140px]">
+            {" "}
+            <Google></Google>
+          </div>
         </div>
       </div>
     </div>
