@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Google from "../Form/GoogleLogin";
 
 
 /* eslint-disable react/no-unescaped-entities */
@@ -10,13 +11,10 @@ const Registration = () => {
     <div>
       <div className="mx-auto max-w-screen-xl px-4 py-4 md:py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-md">
-        <p className="text-center md:text-3xl text-xl font-medium  ">
+          <p className="text-center md:text-3xl text-xl font-medium  ">
             Sign up to your account and take control of your tasks🥳
-
-            </p> 
+          </p>
           <htmlForm className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 ">
-            
-
             <div>
               <label htmlFor="Name" className="sr-only">
                 Name
@@ -148,6 +146,39 @@ const Registration = () => {
               </div>
             </div>
 
+            <div className="md:flex gap-2 items-center">
+              <div className=" md:pb-0 pb-4">
+                <label htmlFor="password" className="sr-only">
+                  Type
+                </label>
+
+                <div className="relative">
+                  <select className="select select-bordered w-full  focus:outline-none">
+                    <option disabled selected>
+                      What is your occupation?
+                    </option>
+                    <option>Student</option>
+                    <option>Teacher</option>
+                    <option>Baker</option>
+                    <option>Developer</option>
+                    <option>Markter</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex-1">
+                <label htmlFor="password" className="sr-only">
+                  Picture
+                </label>
+
+                <div className="relative">
+                  <input
+                    type="file"
+                    className="file-input w-full text-xs  focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
             <button
               type="submit"
               className="block w-full rounded-lg  bg-neutral px-5 py-3 text-sm font-medium text-white"
@@ -157,11 +188,12 @@ const Registration = () => {
 
             <p className="text-center text-sm flex text-gray-600">
               Already have an account?
-              <Link to={'/login'} className="underline ml-1 cursor-pointer">Sign in</Link>
+              <Link to={"/login"} className="underline ml-1 cursor-pointer">
+                Sign in
+              </Link>
             </p>
-
-            
           </htmlForm>
+         <div className="md:max-w-[220px] max-w-[140px]">  <Google></Google></div>
         </div>
       </div>
     </div>

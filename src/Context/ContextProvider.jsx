@@ -1,10 +1,15 @@
 /* eslint-disable react/prop-types */
 import { createContext } from "react";
 export const AuthContext = createContext(null);
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import auth from "../Firebase/firebase.config";
 const ContextProvider = ({ children }) => {
-
   const resgistration = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -13,9 +18,21 @@ const ContextProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  const githubLogin = () => {
+    const githubProvider = new GithubAuthProvider()
+    return signInWithPopup(auth,githubProvider)
+  };
+
+  const googleLogin = () => {
+    const googleProvider = new GoogleAuthProvider()
+    return signInWithPopup(auth,googleProvider)
+  };
+
   const authInfo = {
     resgistration,
-    login
+    login,
+    githubLogin,
+    googleLogin
   };
 
   return (
