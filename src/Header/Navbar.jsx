@@ -22,7 +22,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout().then(() => {
       toast.success("🎊Successfully Logout!");
-        navigate('/dashboard')
+        navigate('/')
     }).catch((error) => {
       toast.error(`${error.message.slice(17).replace(")", "")}`)
     });

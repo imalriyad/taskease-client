@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
+import Google from "./GoogleLogin";
 
 /* eslint-disable react/no-unescaped-entities */
 const Login = () => {
   const [isShow, setShow] = useState(false);
   const { login } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const {
     register,
     handleSubmit,
@@ -22,8 +24,8 @@ const Login = () => {
       .then((result) => {
         if (result.user) {
           toast.success("Login Successfully! 🎉");
-          navigate('/dashboard')
-      }
+          navigate(state ? state : "/");
+        }
       })
       .catch((error) => {
         console.log(error.message);
@@ -142,6 +144,10 @@ const Login = () => {
               </Link>
             </p>
           </form>
+          <div className="md:max-w-[220px] max-w-[140px]">
+            {" "}
+            <Google></Google>
+          </div>
         </div>
       </div>
     </div>

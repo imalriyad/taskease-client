@@ -1,11 +1,14 @@
 import toast from "react-hot-toast";
 import useAuth from "../Hooks/useAuth";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Google = () => {
   const { githubLogin, googleLogin } = useAuth();
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const handleGithub = () => {
     githubLogin()
-      .then((result) => {
+      .then(() => {
         toast.success("Login Successfully! 🎉");
       })
       .catch((error) => {
@@ -14,8 +17,9 @@ const Google = () => {
   };
   const handleGoogle = () => {
     googleLogin()
-      .then((result) => {
+      .then(() => {
         toast.success("Login Successfully! 🎉");
+        navigate(state ? state : "/");
       })
       .catch((error) => {
         console.log(error.message);
