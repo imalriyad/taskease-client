@@ -231,7 +231,7 @@ const Registration = () => {
                     onChange={handleSelect}
                     className="select select-bordered w-full  focus:outline-none"
                   >
-                    <option disabled selected>
+                    <option selected>
                       What is your occupation?
                     </option>
                     <option>Student</option>

@@ -49,6 +49,7 @@ const ContextProvider = ({ children }) => {
     return () => unsubScribe();
   }, []);
 
+  
   const authInfo = {
     resgistration,
     login,
@@ -56,7 +57,7 @@ const ContextProvider = ({ children }) => {
     githubLogin,
     googleLogin,
     user,
-    isLoading,
+    isLoading
   };
   return (
     <div>
