@@ -1,20 +1,25 @@
+import toast from "react-hot-toast";
 import useAuth from "../Hooks/useAuth";
 
 const Google = () => {
-  const { githubLogin,googleLogin } = useAuth();
+  const { githubLogin, googleLogin } = useAuth();
   const handleGithub = () => {
-    githubLogin().then((result) => {
-     console.log(result.user);
-    }).catch((error) => {
-     console.log(error.message);
-    });
+    githubLogin()
+      .then((result) => {
+        toast.success("Login Successfully! 🎉");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   const handleGoogle = () => {
-    googleLogin().then((result) => {
-     console.log(result.user);
-    }).catch((error) => {
-     console.log(error.message);
-    });
+    googleLogin()
+      .then((result) => {
+        toast.success("Login Successfully! 🎉");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   return (
     <div className="flex items-center gap-2">

@@ -2,7 +2,6 @@ import { MdOutlineChecklistRtl } from "react-icons/md";
 import { FaMagnifyingGlassChart } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
-
 const Hero = () => {
   return (
     <div className="max-w-screen-xl px-6 mx-auto ">
@@ -34,8 +33,9 @@ const Hero = () => {
                 Cross-Platform Accessibility
               </li>
             </p>
-            <Link to={'dashboard'} className="btn btn-sm btn-neutral">Let’s Explore <FaMagnifyingGlassChart />
-</Link>
+            <Link to={"dashboard"} className="btn btn-sm btn-neutral">
+              Let’s Explore <FaMagnifyingGlassChart />
+            </Link>
           </div>
           <img
             src="/public/banner.png"

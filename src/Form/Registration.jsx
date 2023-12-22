@@ -2,15 +2,22 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Google from "../Form/GoogleLogin";
 import { useForm } from "react-hook-form";
-
+import useAuth from "../Hooks/useAuth";
+import toast from "react-hot-toast";
+import { updateProfile } from "firebase/auth";
+import auth from "../Firebase/firebase.config";
+import useAxios from "../Hooks/useAxios";
+const imgBbUploadKEy = import.meta.env.VITE_APP_IMGBBKEY;
+const photoUploadApi = `https://api.imgbb.com/1/upload?key=${imgBbUploadKEy}`;
 /* eslint-disable react/no-unescaped-entities */
 const Registration = () => {
+  const { resgistration } = useAuth();
   const [isShow, setShow] = useState(false);
   const [occupation, setOccupation] = useState("");
+  const axiosPublic = useAxios();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -18,10 +25,33 @@ const Registration = () => {
     setOccupation(e.target.value);
   };
 
-  const onSubmit = (data)=>{
-  console.log(data);
-  } 
+  const onSubmit = async (data) => {
+    const email = data.email;
+    const password = data.password;
+    const imageFile = { image: data?.photourl[0] };
+    const res = await axiosPublic.post(photoUploadApi, imageFile, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
+    const photoUrl = res.data?.data?.display_url;
+
+    resgistration(email, password)
+      .then(() => {
+        updateProfile(auth.currentUser, {
+          displayName: data.name,
+          photoURL: photoUrl,
+        })
+          .then(async () => {
+            toast.success("Registration Successfully! 🎉");
+          })
+          .catch((err) =>
+            toast.error(`${err.message.slice(17).replace(")", "")}`)
+          );
+      })
+      .catch((err) => toast.error(`${err.message.slice(17).replace(")", "")}`));
+  };
 
   return (
     <div>
@@ -30,7 +60,10 @@ const Registration = () => {
           <p className="text-center md:text-3xl text-xl font-medium  ">
             Sign up to your account and take control of your tasks🥳
           </p>
-          <form onSubmit={handleSubmit(onSubmit)} className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 ">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 "
+          >
             <div>
               <label htmlFor="Name" className="sr-only">
                 Name
@@ -43,6 +76,11 @@ const Registration = () => {
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter Name"
                 />
+                {errors.name?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Name is required
+                  </p>
+                )}
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
@@ -74,6 +112,11 @@ const Registration = () => {
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                 />
+                {errors.email?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Email is required
+                  </p>
+                )}
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
@@ -105,6 +148,11 @@ const Registration = () => {
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter Number"
                 />
+                {errors.number?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Number is required
+                  </p>
+                )}
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
@@ -137,6 +185,11 @@ const Registration = () => {
                   className="w-full border rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
                 />
+                {errors.password?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Password is required
+                  </p>
+                )}
 
                 <span
                   onClick={() => setShow(!isShow)}
@@ -197,8 +250,14 @@ const Registration = () => {
                 <div className="relative">
                   <input
                     type="file"
+                    {...register("photourl", { required: true })}
                     className="file-input w-full text-xs  focus:outline-none"
-                  />
+                  />{" "}
+                  {errors.photourl?.type === "required" && (
+                    <p role="alert" className="text-red-500 text-sm">
+                      Photo is required
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -207,7 +266,7 @@ const Registration = () => {
               type="submit"
               className="block w-full rounded-lg  bg-neutral px-5 py-3 text-sm font-medium text-white"
             >
-              Sign in
+              Sign up
             </button>
 
             <p className="text-center text-sm flex text-gray-600">

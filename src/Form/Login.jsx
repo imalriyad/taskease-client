@@ -1,15 +1,43 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 /* eslint-disable react/no-unescaped-entities */
 const Login = () => {
   const [isShow, setShow] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const email = data?.email;
+    const password = data?.password;
+    login(email, password)
+      .then((result) => {
+        if (result.user) {
+          toast.success("Login Successfully! 🎉");
+          navigate('/dashboard')
+      }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
   return (
     <div>
       <div className="mx-auto max-w-screen-xl px-4 py-8 md:py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-md">
-          <htmlForm className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+          >
             <p className="text-center md:text-3xl text-2xl font-medium">
               Sign in to your account 🎉
             </p>
@@ -22,9 +50,15 @@ const Login = () => {
               <div className="relative">
                 <input
                   type="email"
+                  {...register("email", { required: true })}
                   className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                 />
+                {errors.email?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Email is required
+                  </p>
+                )}
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
@@ -52,10 +86,16 @@ const Login = () => {
 
               <div className="relative">
                 <input
+                  {...register("password", { required: true })}
                   type={`${isShow ? "text" : "password"}`}
                   className="w-full border rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
                 />
+                {errors.password?.type === "required" && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    Password is required
+                  </p>
+                )}
 
                 <span
                   onClick={() => setShow(!isShow)}
@@ -94,11 +134,14 @@ const Login = () => {
 
             <p className="text-center text-sm flex text-gray-600">
               No account?
-              <Link to={'/resgistration'} className="underline ml-1 cursor-pointer">Sign up</Link>
+              <Link
+                to={"/resgistration"}
+                className="underline ml-1 cursor-pointer"
+              >
+                Sign up
+              </Link>
             </p>
-
-            
-          </htmlForm>
+          </form>
         </div>
       </div>
     </div>
