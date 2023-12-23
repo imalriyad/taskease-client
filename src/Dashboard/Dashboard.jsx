@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaTasks } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
 import { MdMenuOpen } from "react-icons/md";
@@ -78,13 +78,7 @@ const Dashboard = () => {
           <NavLink to={"/"} className="flex text-lg gap-3 items-center">
             <FaHome className="text-xl" /> Home
           </NavLink>
-          <NavLink
-            onClick={() => setMenu(false)}
-            to={"/dashboard/task"}
-            className="flex text-lg gap-3 items-center"
-          >
-            <FaTasks className="text-xl" /> Task
-          </NavLink>
+          
           <div className="dropdown cursor-pointer dropdown-end">
             <div tabIndex={0} className="m-1 flex items-center gap-2">
               <img

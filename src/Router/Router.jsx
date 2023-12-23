@@ -9,7 +9,6 @@ import Dashboard from "../Dashboard/Dashboard";
 import Login from "../Form/Login";
 import Registration from "../form/Registration";
 import PrivateRoute from "../Private/PrivateRoute";
-import Task from "../Dashboard/Task";
 
 const router = createBrowserRouter([
   {
@@ -49,12 +48,7 @@ const router = createBrowserRouter([
   },{
     path:'dashboard',
     element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
-    children:[
-      {
-        path:'task',
-        element:<PrivateRoute><Task></Task></PrivateRoute>
-      }
-    ]
+    
   }
 ]);
 
