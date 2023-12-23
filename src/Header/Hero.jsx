@@ -38,7 +38,7 @@ const Hero = () => {
             </Link>
           </div>
           <img
-            src="/public/banner.png"
+            src="https://i.postimg.cc/rFkzMHG8/banner.png"
             className="md:w-[35%] mx-auto md:mx-0"
             alt=""
           />
