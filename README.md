@@ -4,4 +4,4 @@
 - Add Task
 - Set Task Reminder with react-date-picker
 
-#### Technology: React.js and Tailwindcss for Frontend node.js express.js for backend and firebase for authentication 
+#### Technology: React.js and Tailwindcss for Frontend node.js express.js for backend and firebase for authentication and Mongodb for Databse 
