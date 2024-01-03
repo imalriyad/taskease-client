@@ -1,18 +1,43 @@
 import { useState } from "react";
 import useAuth from "../Hooks/useAuth";
 import useTask from "../Hooks/useTask";
-import { Draggable, Droppable } from "react-drag-and-drop";
 import { IoEyeSharp } from "react-icons/io5";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { MdDeleteForever } from "react-icons/md";
+import swal from "sweetalert";
+import useAxios from "../Hooks/useAxios";
 
 const Task = () => {
-  const [task] = useTask();
+  const [task,refetch] = useTask();
   const { user } = useAuth();
+  const axiosPublic = useAxios();
   const [filterTask, setFilterTask] = useState([]);
 
   const openModal = (taskId) => {
     const taskDetails = task.find((task) => task._id === taskId);
     setFilterTask(taskDetails);
     document.getElementById("my_modal_4").showModal();
+  };
+
+  const handleDeleteTask = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this Task",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axiosPublic.delete(`/delete-task/${id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            swal("Poof! Your Task file has been deleted!", {
+              icon: "success",
+            });
+            refetch()
+          }
+        });
+      }
+    });
   };
 
   return (
@@ -35,29 +60,31 @@ const Task = () => {
       <div className=" pt-4 items-start justify-between gap-2">
         <div className="w-full relative gap-4 md:grid grid-cols-3 ">
           {task?.map((item) => (
-            <div key={item._id}  className="bg-base-100 rounded-md text-neutral cursor-pointer relative p-4">
-            <h1 className="text-sm">
-              <span className="font-medium">Title : </span>
-              {item.title}
-            </h1>
-
-          <div className=" pb-3">  <button
-              onClick={() => openModal(item._id)}
-              className="btn hover:bg-green-500 btn-xs absolute bottom-2 right-2 "
+            <div
+              key={item._id}
+              className="bg-base-100 rounded-md text-neutral cursor-pointer relative p-4"
             >
-              <IoEyeSharp/>
-            </button></div>
-          </div>
-            // <Droppable
-            //   key={item._id}
-            //   types={["todo"]}
-            //   onDrop={this?.onDrop.bind(this)}
-            // >
-            //   <Draggable type="todo" data="todo">
-            //     {" "}
-                
-            //   </Draggable>
-            // </Droppable>
+              <h1 className="text-sm flex items-start gap-x-1 font-medium">
+                <span className="font-normal"></span>
+                <IoMdInformationCircleOutline className="text-xl" />
+                {item.title}
+              </h1>
+
+              <div className="flex items-center justify-between pt-4">
+                <button
+                  onClick={() => openModal(item._id)}
+                  className="btn hover:bg-green-500 btn-xs"
+                >
+                  <IoEyeSharp />
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(item._id)}
+                  className="btn hover:bg-green-500 btn-xs"
+                >
+                  <MdDeleteForever />
+                </button>
+              </div>
+            </div>
           ))}
 
           <dialog id="my_modal_4" className="modal">
@@ -69,8 +96,14 @@ const Task = () => {
               </form>
               <h3 className="font-bold text-lg">Title: {filterTask?.title}</h3>
               <p className="py-4">{filterTask?.description}</p>
-              <p><span className="font-semibold">Deadline</span>: {filterTask?.deadline?.slice(0, 10)} </p>
-              <p className="capit"><span className="font-semibold">Priority</span>: {filterTask?.priority} </p>
+              <p>
+                <span className="font-semibold">Deadline</span>:{" "}
+                {filterTask?.deadline?.slice(0, 10)}{" "}
+              </p>
+              <p className="capit">
+                <span className="font-semibold">Priority</span>:{" "}
+                {filterTask?.priority}{" "}
+              </p>
             </div>
           </dialog>
         </div>
